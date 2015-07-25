@@ -144,7 +144,4 @@ var TextCrawler = function(action, className, speed){
   this[action]();
 };
 
-
-
-
 textCrawler = new TextCrawler('fillToTail', 'title', 25);
