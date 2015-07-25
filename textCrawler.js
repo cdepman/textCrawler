@@ -1,34 +1,39 @@
 
-var textCrawler = function(className, flowSpeed){
+var TextCrawler = function(action, className, speed){
 
   var textLength = $('.' + className).length;
   var hash = {color: ''};
-  changeColor();
     
-  var crawl = function(element){
+  this.crawl = function(element){
     element = element || $('.head')[0];
     $(element).css('color', '#' + hash.color);
     if ($(element).next().length === 0){
+      var that = this;
       setTimeout(function(){
-        changeColor(hash.color);
-        crawl($('.head'));
-      }, flowSpeed);
+        that.changeColor(hash.color);
+        that.crawl($('.head'));
+      }, speed);
       return;
     }
+    var that = this;
     setTimeout(function(){
-      crawl($(element).next()[0]);
-    }, flowSpeed);
+      that.crawl($(element).next()[0]);
+    }, speed);
   };
 
-  function changeColor(oldColor){
+  this.changeColor = function(oldColor){
     oldColor = oldColor || '';
     hash.color = Math.floor(Math.random()*16777215).toString(16);
     if (hash.color === oldColor){
-      changeColor();
+      this.changeColor();
     }
   }
 
-  crawl();
+  this[action]();
+  this.changeColor();
 };
 
-textCrawler('title', 50);
+
+
+
+textCrawler = new TextCrawler('crawl', 'title', 50);
