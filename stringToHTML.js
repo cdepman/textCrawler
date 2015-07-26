@@ -14,20 +14,18 @@ var createOpeningTag = function(elementName, options){
   return openingTag + '>';
 }
 
-
-var HTMLCharacterCode = function(char){
+var getHTMLCharacterCode = function(char){
    return '&#' + char.charCodeAt(0);
 }
 
 var stringToHTMLContainer = function(string, containerOptions, letterOptions){
   element = containerOptions['element'] || 'div';
-  console.log('hello:', element);
   containerOptions = containerOptions || {'class': 'container'};
   letterOptions = letterOptions || {};
 
 	var HTMLStringBuilder = createOpeningTag(element, containerOptions);
 	for (var i = 0; i < string.length; i++){
-		HTMLStringBuilder += createOpeningTag('div', letterOptions) + HTMLCharacterCode(string[i]) + createClosingTag('div');
+		HTMLStringBuilder += createOpeningTag('div', letterOptions) + getHTMLCharacterCode(string[i]) + createClosingTag('div');
 	}
 	return HTMLStringBuilder + createClosingTag(element);
 }
