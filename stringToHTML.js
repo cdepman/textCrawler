@@ -1,14 +1,25 @@
+
+
+
 var createClosingTag = function(elementName){
   elementName = elementName || 'div';
   return '</' + elementName + '>';
 }
 
+var buildCSS = function(options){
+  var CSSBlock = "style='"
+  for (var key in options) {
+    CSSBlock += key + ': ' + options[key] + '; '; 
+  }
+  return CSSBlock + "'";
+}
+
 var createOpeningTag = function(elementName, options){
   elementName = elementName || 'div';
   var openingTag = '<' + elementName;
-  for (key in options){
+  for (var key in options){
     if (options[key]){
-      openingTag += ' ' + key + '="' + options[key] + '"';
+      openingTag += " " + key + "='" + options[key] + "'";
     }
   }
   return openingTag + '>';
@@ -19,8 +30,9 @@ var getHTMLCharacterCode = function(char){
 }
 
 var stringToHTMLContainer = function(string, containerOptions, letterOptions){
-  element = containerOptions['element'] || 'div';
-  containerOptions = containerOptions || {'class': 'container'};
+  
+  containerOptions = containerOptions || {'class': 'container', 'element':'div'};
+  element = containerOptions['element'];
   letterOptions = letterOptions || {};
 
 	var HTMLStringBuilder = createOpeningTag(element, containerOptions);
