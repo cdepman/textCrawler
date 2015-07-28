@@ -287,7 +287,7 @@ var TextCrawler = function(action, className, speed){
 
   this.initialize = function(action, speed){
     this.CONTINUE = true;
-    speed = speed || 100;
+    SPEED = speed || 100;
     this.changeRandomColor('primary');
     this.changeRandomColor('secondary');
     this[action]();

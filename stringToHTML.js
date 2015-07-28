@@ -1,6 +1,3 @@
-
-
-
 var createClosingTag = function(elementName){
   elementName = elementName || 'div';
   return '</' + elementName + '>';
