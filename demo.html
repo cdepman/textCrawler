@@ -53,11 +53,11 @@
       <option value="crawl">Wave</option>
     </select><br><br>
     Primary color:
-    <input type="color" name="favcolor" value="#FFFFFF"><br><br>
+    <input id="primary-color" type="color" name="favcolor" value="#FFFFFF"><br><br>
     Secondary color:
-    <input type="color" name="favcolor" value="#FFFFFF"><br><br>
+    <input id="secondary-color" type="color" name="favcolor" value="#FFFFFF"><br><br>
     Neon glow color:
-    <input type="color" name="favcolor" value="#FFFFFF"><br><br>
+    <input id="neon-color" type="color" name="favcolor" value="#FFFFFF"><br><br>
     <button id='go'>Watch the magic</button>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -84,11 +84,15 @@
       }
       var text = $('#input-text').val();
       if (text){
-        console.log();
-        $('.container').remove();
-        var animation = $('#animation-type').val();
+        var child = document.getElementsByClassName("container")[0];
+        if (child){
+          var parent = child.parentElement;
+          parent.removeChild(child);
+        }
+        var animation = document.getElementById('animation-type').value
         var HTML = stringToHTML(text);
-        var speed = $('#speeder').val();
+        var speed = document.getElementById('speeder').value
+        var primaryColor =   '';
         $('body').append(HTML);
         currentAnimation = new TextCrawler(animation, 'title', speed);
         currentAnimation.changeSpeed($('#speeder').val());
