@@ -1,40 +1,47 @@
-var createClosingTag = function(elementName){
-  elementName = elementName || 'div';
-  return '</' + elementName + '>';
-}
 
-var buildCSS = function(options){
-  var CSSBlock = "style='"
-  for (var key in options) {
-    CSSBlock += key + ': ' + options[key] + '; '; 
+
+var stringToHTML = function(string){
+
+  var createClosingTag = function(elementName){
+    elementName = elementName || 'div';
+    return '</' + elementName + '>';
   }
-  return CSSBlock + "'";
-}
 
-var createOpeningTag = function(elementName, options){
-  elementName = elementName || 'div';
-  var openingTag = '<' + elementName;
-  for (var key in options){
-    if (options[key]){
-      openingTag += " " + key + "='" + options[key] + "'";
+  var buildCSS = function(options){
+    var CSSBlock = "style='"
+    for (var key in options) {
+      CSSBlock += key + ': ' + options[key] + '; '; 
     }
+    return CSSBlock + "'";
   }
-  return openingTag + '>';
-}
 
-var getHTMLCharacterCode = function(char){
-   return '&#' + char.charCodeAt(0);
-}
+  var createOpeningTag = function(elementName, options){
+    elementName = elementName || 'div';
+    var openingTag = '<' + elementName;
+    for (var key in options){
+      if (options[key]){
+        openingTag += " " + key + "='" + options[key] + "'";
+      }
+    }
+    return openingTag + '>';
+  }
 
-var stringToHTMLContainer = function(string, containerOptions, letterOptions){
-  
-  containerOptions = containerOptions || {'class': 'container', 'element':'div'};
-  element = containerOptions['element'];
-  letterOptions = letterOptions || {};
+  var getHTMLCharacterCode = function(char){
+     return '&#' + char.charCodeAt(0);
+  }
 
-	var HTMLStringBuilder = createOpeningTag(element, containerOptions);
-	for (var i = 0; i < string.length; i++){
-		HTMLStringBuilder += createOpeningTag('div', letterOptions) + getHTMLCharacterCode(string[i]) + createClosingTag('div');
-	}
-	return HTMLStringBuilder + createClosingTag(element);
+  var stringToHTMLContainer = function(string, containerOptions, letterOptions){
+    
+    containerOptions = containerOptions || {'class': 'container', 'element':'div'};
+    letterOptions = letterOptions || {'class':'title'};
+    element = containerOptions['element'];
+
+    var HTMLStringBuilder = createOpeningTag(element, containerOptions);
+    for (var i = 0; i < string.length; i++){
+      HTMLStringBuilder += createOpeningTag('div', letterOptions) + getHTMLCharacterCode(string[i]) + createClosingTag('div');
+    }
+    return HTMLStringBuilder + createClosingTag(element);
+  }
+
+  return stringToHTMLContainer(string);
 }

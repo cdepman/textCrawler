@@ -2,28 +2,99 @@
 <html>
 <head>
   <title>Color Runner Demo</title>
+  <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+  <style type="text/css">
+    .demo-title {
+      font-size: 3em;
+      text-align: center;
+      font-family: 'Lobster', cursive;
+    }
+    #user-input {
+      margin-top: 10px; 
+      text-align: center;
+    }
+    #input-text {
+      margin-top: 10px;
+    }
+    .container {
+      text-align:center; 
+      margin: 20px 0 25px;
+      letter-spacing: -2px;
+    }
+    .title {
+      display: inline;
+      color: red; 
+      font-size: 8em;
+      font-family: 'Lobster', 'cursive';
+      text-shadow: 0 0 5px #fff,
+                    0 0 10px #fff,
+                    0 0 15px #fff,
+                    0 0 20px #FFDD1B,
+                    0 0 35px #FFDD1B,
+                    0 0 40px #FFDD1B,
+                    0 0 50px #FFDD1B,
+                    0 0 75px #FFDD1B;
+    }
+  </style>
 </head>
 <body>
-  <div>
-    Add some words here:
-    <input type='text'><br><br>
-    Select some things here: <br><br>
-    <label for="Radiate">Radiate</label>
-    <input type="radio" value="radiate"><br>
-    <label for="Pong">Pong</label>
-    <input type="radio" value="pong"><br>
-    <label for="Pong">Loop Runner</label>
-    <input type="radio" value="loop_runner"><br>
-    <label for="Pong">Fill Right</label>
-    <input type="radio" value="fill_right"><br>
-    <label for="Pong">Random</label>
-    <input type="radio" value="random"><br>
-    And some things here: <br>
-    <label for='primary-color'>Primary Color</label>
-    <input type="color" value='primary_color'><br>
-    <label for='primary-color'>Secondary Color</label>
-    <input type="color" value='secondary_color'><br>
-    Watch the magic here:
+  <div class='demo-title'>Color Runner</div>
+  <div id='user-input'>
+    Add some words here:<br>
+    <input id="input-text" type='text'><br><br>
+    Choose a speed here: <br><br>
+    <label for=fader>Fast</label>
+    <input type='range' min='10' max='200' value='100' id='speeder'>Slow<br><br>
+    Select an animation here: <br><br>
+    <select id="animation-type">
+      <option value="radiate">Radiate</option>
+      <option value="pong">Pong</option>
+      <option value="fillToTail">Fill</option>
+      <option value="crawl">Wave</option>
+    </select><br><br>
+    Primary color:
+    <input type="color" name="favcolor" value="#FFFFFF"><br><br>
+    Secondary color:
+    <input type="color" name="favcolor" value="#FFFFFF"><br><br>
+    Neon glow color:
+    <input type="color" name="favcolor" value="#FFFFFF"><br><br>
+    <button id='go'>Watch the magic</button>
   </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="stringToHTML.js"></script>
+  <script src="textCrawler.js"></script>
+  <script type="text/javascript">
+  var currentAnimation;
+  $(function(){
+    $('#go').on('click', function(){
+      animate();
+    });
+
+    $('#animation-type').change(function(){
+      animate();
+    });
+
+    $("#speeder").change(function(){
+      currentAnimation.changeSpeed($('#speeder').val());
+    });
+
+    var animate = function(){
+      if (currentAnimation){
+        currentAnimation.stop();
+      }
+      var text = $('#input-text').val();
+      if (text){
+        console.log();
+        $('.container').remove();
+        var animation = $('#animation-type').val();
+        var HTML = stringToHTML(text);
+        var speed = $('#speeder').val();
+        $('body').append(HTML);
+        currentAnimation = new TextCrawler(animation, 'title', speed);
+        currentAnimation.changeSpeed($('#speeder').val());
+      }
+    }
+  });
+  </script>
 </body>
 </html>

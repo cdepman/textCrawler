@@ -1,19 +1,19 @@
 
-var TextCrawler = function(action, className, speed){
+var TextCrawler = function(action, className, speed, primary, secondary){
 
   var TEXTLENGTH = $('.' + className).length;
-  var SPEED = speed || 100;
-  var COLOR = {primary: '', secondary: ''};
+  var COLOR = {primary: primary || '', secondary: secondary || ''};
   var COLORPALETTE = [];
   var STOPSHIFT = 0;
   var CURRENT_POSITION = 0;
   var TEXTELEMENTARRAY = $('.' + className);
+  this.ANIMATIONSPEED = speed || 100;
   this.CONTINUE = true;
     
   this.crawl = function(node){
     if (this.CONTINUE){
       CURRENT_POSITION++
-      node = node || $('.head')[0];
+      node = node || $('.title')[0];
       $(node).css('color', '#' + COLOR.primary);
       if ($(node).next().length === 0){
         var that = this;
@@ -21,13 +21,13 @@ var TextCrawler = function(action, className, speed){
           that.changeRandomColor('primary');
           CURRENT_POSITION = 0;
           that.crawl();
-        }, SPEED);
+        }, this.ANIMATIONSPEED);
         return;
       }
       var that = this;
       setTimeout(function(){
         that.crawl($(node).next()[0]);
-      }, SPEED);
+      }, this.ANIMATIONSPEED);
     }
   };
 
@@ -49,7 +49,7 @@ var TextCrawler = function(action, className, speed){
         that = this;
         setTimeout(function(){
           that.radiate(middle-1, middle+1);
-        }, SPEED);
+        }, this.ANIMATIONSPEED);
         return;
       } else if (!leftIndex && !rightIndex) {
         leftIndex = Math.floor(TEXTLENGTH/2);
@@ -61,14 +61,14 @@ var TextCrawler = function(action, className, speed){
         that = this;
         setTimeout(function(){
           that.radiate(leftIndex-1, rightIndex+1);
-        }, SPEED);
+        }, this.ANIMATIONSPEED);
         return;
       } else {
         this.changeRandomColor('primary');
         that = this;
         setTimeout(function(){
           that.radiate();
-        }, SPEED);
+        }, this.ANIMATIONSPEED);
       }
     }
   };
@@ -76,7 +76,7 @@ var TextCrawler = function(action, className, speed){
   this.fillToTail = function(node){
     if (this.CONTINUE){
       CURRENT_POSITION = ++CURRENT_POSITION;
-      node = node || $('.head')[0];
+      node = node || $('.title')[0];
       $(node).css('color', '#' + COLOR.primary);
 
       if (STOPSHIFT === TEXTLENGTH){
@@ -90,14 +90,14 @@ var TextCrawler = function(action, className, speed){
         setTimeout(function(){
           that.fillToTail($(node).next()[0]);
           $(node).css('color', '#' + COLOR.secondary);
-        }, SPEED); 
+        }, this.ANIMATIONSPEED); 
       } else {
         setTimeout(function(){
           $(node).css('color', '#' + COLOR.primary);
           CURRENT_POSITION = 0;
           STOPSHIFT++;
           that.fillToTail();
-        }, SPEED);
+        }, this.ANIMATIONSPEED);
       }
     }
   };  
@@ -118,14 +118,14 @@ var TextCrawler = function(action, className, speed){
         setTimeout(function(){
           that.fillToTail($(node).next()[0]);
           $(node).css('color', '#' + COLOR.secondary);
-        }, SPEED); 
+        }, this.ANIMATIONSPEED); 
       } else {
         setTimeout(function(){
           $(node).css('color', '#' + COLOR.primary);
           CURRENT_POSITION = 0;
           STOPSHIFT++;
           that.fillToTail();
-        }, SPEED);
+        }, this.ANIMATIONSPEED);
       }
     }
   };  
@@ -146,14 +146,14 @@ var TextCrawler = function(action, className, speed){
         setTimeout(function(){
           that.fillToTail($(node).next()[0]);
           $(node).css('color', '#' + COLOR.secondary);
-        }, SPEED); 
+        }, this.ANIMATIONSPEED); 
       } else {
         setTimeout(function(){
           $(node).css('color', '#' + COLOR.secondary);
           CURRENT_POSITION = 0;
           STOPSHIFT++;
           that.fillToTail();
-        }, SPEED);
+        }, this.ANIMATIONSPEED);
       }
     }
   };
@@ -187,7 +187,7 @@ var TextCrawler = function(action, className, speed){
   this.elastic = function(node){
     if (this.CONTINUE){
       CURRENT_POSITION = ++CURRENT_POSITION;
-      node = node || $('.head')[0];
+      node = node || $('.title')[0];
       $(node).css('color', '#' + COLOR.primary);
 
       if (STOPSHIFT === TEXTLENGTH){
@@ -199,21 +199,21 @@ var TextCrawler = function(action, className, speed){
       if (CURRENT_POSITION < TEXTLENGTH - STOPSHIFT){
         setTimeout(function(){
           that.elastic($(node).next()[0]);
-        }, SPEED); 
+        }, this.ANIMATIONSPEED); 
       } else {
         setTimeout(function(){
           $(node).css('color', '#' + COLOR.secondary);
           CURRENT_POSITION = 0;
           STOPSHIFT++;
           that.elastic();
-        }, SPEED);
+        }, this.ANIMATIONSPEED);
       }
     }
   };
 
   this.singleRunner = function(node){
     if (this.CONTINUE){
-      node = node || $('.head')[0];
+      node = node || $('.title')[0];
       $(node).css('color', '#' + COLOR.primary);
       if ($(node).next().length === 0){
         var that = this;
@@ -221,14 +221,14 @@ var TextCrawler = function(action, className, speed){
           $(node).css('color', '#' + COLOR.secondary);
           that.changeRandomColor('primary');
           that.singleRunner();
-        }, SPEED);
+        }, this.ANIMATIONSPEED);
         return;
       }
       var that = this;
       setTimeout(function(){
         $(node).css('color', '#' + COLOR.secondary);
         that.singleRunner($(node).next()[0]);
-      }, SPEED);
+      }, this.ANIMATIONSPEED);
     }
   };
 
@@ -248,14 +248,14 @@ var TextCrawler = function(action, className, speed){
           that.changeRandomColor('primary');
           that.changeRandomColor('secondary');
           that.pong(rightDirection ? TEXTLENGTH -1 : 0, !rightDirection);
-        }, SPEED);
+        }, this.ANIMATIONSPEED);
         return;
       }
       var that = this;
       setTimeout(function(){
         $(node).css('color', '#' + COLOR.primary);
         that.pong(index + nextStep, rightDirection);
-      }, SPEED);
+      }, this.ANIMATIONSPEED);
     }
   }
 
@@ -265,7 +265,7 @@ var TextCrawler = function(action, className, speed){
 
   this.growUp = function(node, size){
     if (this.CONTINUE){
-      node = node || $('.head')[0];
+      node = node || $('.title')[0];
       previousSize = size || Number.parseInt($(node).css('font-size'));
       newSize = previousSize * 1.5;
       $(node).css('font-size', newSize + 'px');
@@ -274,20 +274,23 @@ var TextCrawler = function(action, className, speed){
         setTimeout(function(){
           $(node).css('font-size', previousSize + 'px');
           that.growUp();
-        }, SPEED);
+        }, this.ANIMATIONSPEED);
         return;
       }
       var that = this;
       setTimeout(function(){
         $(node).css('font-size', previousSize + 'px');
         that.growUp($(node).next()[0], previousSize);
-      }, SPEED);
+      }, this.ANIMATIONSPEED);
     }
   }
 
-  this.initialize = function(action, speed){
+  this.changeSpeed = function(speed){
+    this.ANIMATIONSPEED = speed;
+  }
+
+  this.initialize = function(action, element){
     this.CONTINUE = true;
-    SPEED = speed || 100;
     this.changeRandomColor('primary');
     this.changeRandomColor('secondary');
     this[action]();
@@ -295,10 +298,11 @@ var TextCrawler = function(action, className, speed){
 
   this.initialize(action);
 };
-
-textCrawler = new TextCrawler('growUp', 'title');
-
 // to make:
 // color random letter
 // flash individual letters
 // move letters?
+
+// make it work for all HTML elements, going not just from right to left but up/down/left/diagonal
+
+// make a hash of all elements and update their positions constantly as one of their properties. when looking for the next closest element 
