@@ -23,17 +23,17 @@
     }
     .title {
       display: inline;
-      color: red; 
+      color: white; 
       font-size: 8em;
       font-family: 'Lobster', 'cursive';
-      text-shadow: 0 0 5px #fff,
+/*      text-shadow: 0 0 5px #fff,
                     0 0 10px #fff,
                     0 0 15px #fff,
                     0 0 20px #FFDD1B,
                     0 0 35px #FFDD1B,
                     0 0 40px #FFDD1B,
                     0 0 50px #FFDD1B,
-                    0 0 75px #FFDD1B;
+                    0 0 75px #FFDD1B;*/
     }
   </style>
 </head>
@@ -60,29 +60,17 @@
     <input id="neon-color" type="color" name="favcolor" value="#FFFFFF"><br><br>
     <button id='go'>Watch the magic</button>
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="stringToHTML.js"></script>
   <script src="textCrawler.js"></script>
   <script type="text/javascript">
-  var currentAnimation;
-  $(function(){
-    $('#go').on('click', function(){
-      animate();
-    });
-
-    $('#animation-type').change(function(){
-      animate();
-    });
-
-    $("#speeder").change(function(){
-      currentAnimation.changeSpeed($('#speeder').val());
-    });
-
+  var hash = {currentAnimation: false};
+  document.addEventListener('DOMContentLoaded', function() {
+    // code
     var animate = function(){
-      if (currentAnimation){
-        currentAnimation.stop();
+      if (hash.currentAnimation){
+        hash.currentAnimation.stop();
       }
-      var text = $('#input-text').val();
+      var text = document.getElementById('input-text').value;
       if (text){
         var child = document.getElementsByClassName("container")[0];
         if (child){
@@ -92,12 +80,31 @@
         var animation = document.getElementById('animation-type').value
         var HTML = stringToHTML(text);
         var speed = document.getElementById('speeder').value
-        var primaryColor =   '';
-        $('body').append(HTML);
-        currentAnimation = new TextCrawler(animation, 'title', speed);
-        currentAnimation.changeSpeed($('#speeder').val());
+        var primaryColor = document.getElementById('primary-color').value.slice(1);
+        var secondaryColor = document.getElementById('secondary-color').value.slice(1);
+        var neonColor =  document.getElementById('neon-color').value.slice(1);
+        var animationContainer = document.createElement('div');
+        animationContainer.innerHTML = HTML;
+        document.body.appendChild(animationContainer);
+        hash.currentAnimation = new TextCrawler(animation, 'title', speed, primaryColor, secondaryColor);
+        hash.currentAnimation.changeSpeed(document.getElementById('speeder').value);
       }
     }
+
+    // event listeners 
+    document.getElementById('go').addEventListener('click', function(){
+      animate();
+    });
+
+    document.getElementById('animation-type').addEventListener('change', function(){
+      console.log('animation changed!');
+      animate();
+    });
+
+    document.getElementById('speeder').addEventListener('change', function(){
+      hash.currentAnimation.changeSpeed(this.value);
+    });
+
   });
   </script>
 </body>
